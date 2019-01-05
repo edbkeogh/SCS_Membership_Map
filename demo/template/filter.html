@@ -42,6 +42,7 @@
 <link type="text/css" rel="stylesheet" href="https://classicalstudies.org/sites/default/files/css/css_MR6NYOtucSiZT1IJP662M6enux2l4oLhh6zTzxl0akw.css" media="all" />
 <link type="text/css" rel="stylesheet" href="https://classicalstudies.org/sites/default/files/css/css_iF77QPoSlYJPzQ6W4p3iOuzXg_nS3_nIDyXLYeXrcdM.css" media="all" />
 <link type="text/css" rel="stylesheet" href="https://classicalstudies.org/sites/default/files/css/css_47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU.css" media="print" />
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css' integrity='sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU' crossorigin='anonymous'>
 <link rel="stylesheet" href="../leaflet.css" />
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
 <link rel="stylesheet" href="../scs728.css" />
@@ -203,8 +204,8 @@ jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":
 
   <div class="pane-content">
     <button onclick="hideDefault()">Show Specialists</button>
-    <button onclick="showHell()">Show Hellenists</button>
-    <button onclick="showLat()">Show Latinists</button>
+    <button onclick="showHell()">Show Greens</button>
+    <button onclick="showLat()">Show Reds</button>
     <button onclick="showAll()">Show All</button>
     <button onclick="resize()"><i class="fas">&#xf31e;</i></button>
     <div id="container">
@@ -232,13 +233,13 @@ jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":
 <li>
 		<a href="../testing/CMLink.html">Searchable by Name</a></li>
 <li>
-		<a href="guidelines-authors-abstracts">Sample2</a></li>
-<li>
+		<a href="SCS.html">Default Version</a></li>
+<!-- <li>
 		<a href="eligibility-submit-proposal-or-abstract">Sample3</a></li>
 <li>
 		<a href="https://classicalstudies.org/annual-meeting/suggestions-authors-abstracts-program-committee">Sample4</a></li>
 <li>
-		<a href="https://classicalstudies.org/publications-and-research/tips-preparing-texts-digital-publication">Sample5</a></li>
+		<a href="https://classicalstudies.org/publications-and-research/tips-preparing-texts-digital-publication">Sample5</a></li> -->
 </ul>
 <hr />
 
@@ -628,7 +629,7 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
 
     var geojson,
       metadata,
-      geojsonPath = 'test_scs13.geojson',
+      geojsonPath = '../test_scs13.geojson',
       categoryField = '5074', //This is the fieldname for marker category (used in the pie and legend)
       iconField = '5065', //This is the fieldame for marker icon
       popupFields = ['5001'], //Popup will display these fields
