@@ -98,6 +98,22 @@
   border-color: #132838;
 }
 
+.category-6{
+  fill: #14b76b;
+  stroke: #132838;
+  background: #14b76b;
+  border-color: #132838;
+}
+
+.category-7{
+  fill: #ff0000;
+  stroke: #132838;
+  background: #ff0000;
+  border-color: #132838;
+}
+
+/*loeb green 14b76b , loeb red ff0000*/
+
 /*marker icons*/
 .icon-1{
   /* background-image: url('running-16.png'); */

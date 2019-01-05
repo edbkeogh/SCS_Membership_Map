@@ -202,7 +202,11 @@ jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":
 
 
   <div class="pane-content">
-    <p>this text is invisible?</p>
+    <button onclick="hideDefault()">Show Specialists</button>
+    <button onclick="showHell()">Show Hellenists</button>
+    <button onclick="showLat()">Show Latinists</button>
+    <button onclick="showAll()">Show All</button>
+    <button onclick="resize()"><i class="fas">&#xf31e;</i></button>
     <div id="container">
       <div id="map" style="width:90vw;height:85vh;">
 
@@ -603,9 +607,28 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
   </body>
   <script>
     "use strict"
+    var markers = L.geoJson(geojson, {
+    pointToLayer: defineFeature,
+    onEachFeature: defineFeaturePopup
+    });
+  // var t = document.getElementById("search").value;
+  //   // Get the input field
+  //   var input = document.getElementById("search");
+  //
+  //   // Execute a function when the user releases a key on the keyboard
+  //   input.addEventListener("keyup", function(event) {
+  //     // Cancel the default action, if needed
+  //     event.preventDefault();
+  //     // Number 13 is the "Enter" key on the keyboard
+  //     if (event.keyCode === 13) {
+  //       // Trigger the button element with a click
+  //       document.getElementById("searchclicked").click();
+  //     }
+  //   });
+
     var geojson,
       metadata,
-      geojsonPath = '../scs13.geojson',
+      geojsonPath = 'test_scs13.geojson',
       categoryField = '5074', //This is the fieldname for marker category (used in the pie and legend)
       iconField = '5065', //This is the fieldame for marker icon
       popupFields = ['5001'], //Popup will display these fields
@@ -616,7 +639,7 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
         maxClusterRadius: 2*rmax,
         iconCreateFunction: defineClusterIcon //this is where the magic happens
       }),
-      map = L.map('map').setView([0, 0], 2);
+      map = L.map('map').setView([0, 0], 0);
     //Add basemap
     L.tileLayer(tileServer, {attribution: tileAttribution,  maxZoom: 10}).addTo(map);
     //and the empty markercluster layer
@@ -627,7 +650,9 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
             geojson = data;
             metadata = data.properties;
   		  console.log(data)
-            var markers = L.geoJson(geojson, {
+        //  console.log(JSON.stringify(geojson.features))
+        var testing =
+           markers = L.geoJson(geojson, {
   			pointToLayer: defineFeature,
   			onEachFeature: defineFeaturePopup
             });
@@ -639,6 +664,112 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
   	  console.log('Could not load data...');
         }
     });
+  function Clear() {
+    markerclusters.clearLayers();
+  }
+
+  function showAll() {
+    markerclusters.clearLayers();
+    markerclusters.addLayer(markers);
+    map.fitBounds(markers.getBounds());
+  }
+
+  function hideDefault() {
+    markerclusters.clearLayers();
+  console.log("button pressed")
+  var fil = L.geoJson(geojson, {
+    filter: function(feature, layer) {
+      switch(feature.properties[categoryField]) {
+    case 6:
+      return true
+      break;
+    case 7:
+      return true
+      break;
+      default:
+        return false
+          //  return feature.properties[categoryField] = 6;
+        }
+      },
+  pointToLayer: defineFeature,
+  onEachFeature: defineFeaturePopup
+   });
+  markerclusters.addLayer(fil);
+
+
+  map.fitBounds(fil.getBounds());
+  }
+
+  function showHell() {
+    markerclusters.clearLayers();
+  console.log("button pressed")
+  var fil = L.geoJson(geojson, {
+    filter: function(feature, layer) {
+      switch(feature.properties[categoryField]) {
+    case 6:
+      return true
+      break;
+    case 7:
+      return false
+      break;
+      default:
+        return false
+          //  return feature.properties[categoryField] = 6;
+        }
+      },
+  pointToLayer: defineFeature,
+  onEachFeature: defineFeaturePopup
+   });
+  markerclusters.addLayer(fil);
+
+
+  map.fitBounds(fil.getBounds());
+  }
+
+  function showLat() {
+    markerclusters.clearLayers();
+  console.log("button pressed")
+  var fil = L.geoJson(geojson, {
+    filter: function(feature, layer) {
+      switch(feature.properties[categoryField]) {
+    case 6:
+      return false
+      break;
+    case 7:
+      return true
+      break;
+      default:
+        return false
+          //  return feature.properties[categoryField] = 6;
+        }
+      },
+  pointToLayer: defineFeature,
+  onEachFeature: defineFeaturePopup
+   });
+  markerclusters.addLayer(fil);
+
+
+  map.fitBounds(fil.getBounds());
+  }
+
+  function resize() {
+    map.fitBounds(markers.getBounds());
+  }
+
+  //sorry, this didn't work either
+  // function randomSpec() {
+  //
+  //   markerclusters.clearLayers();
+  //   console.log("button pressed")
+  //   var i;
+  //   for (i = 0; i < geojson.length; i++) {
+  //     geojson.features.properties[categoryField] = Math.floor((Math.random() * 3) + 1)
+  //
+  //   };
+  //   markerclusters.addLayer(markers);
+  //   map.fitBounds(markers.getBounds());
+  // }
+
   function defineFeature(feature, latlng) {
     var categoryVal = feature.properties[categoryField],
       iconVal = feature.properties[iconField];
@@ -647,7 +778,11 @@ The award… <a href="https://t.co/jRN29F0CD0">https://t.co/jRN29F0CD0</a></span
           className: myClass,
           iconSize:null
       });
-      return L.marker(latlng, {icon: myIcon});
+  //     if (categoryVal = 6) {    //sad attempt to filter for cat 6
+  //       return L.marker(latlng, {icon: myIcon});
+  // };
+  // console.log(latlng)
+  return L.marker(latlng, {icon: myIcon});
   }
   function defineFeaturePopup(feature, layer) {
     var props = feature.properties,
