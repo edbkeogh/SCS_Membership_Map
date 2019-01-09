@@ -25,6 +25,12 @@
 </div>
 <script>
   "use strict"
+  var grayscale   = L.tileLayer(tileServer, {attribution: tileAttribution}),
+      		streets  = L.tileLayer(tileServer, {attribution: tileAttribution});
+          var baseLayers = {
+		"Grayscale": grayscale,
+		"Streets": streets
+	};
   var geojson,
     metadata,
     geojsonPath = 'scs13.geojson',
@@ -32,15 +38,33 @@
     iconField = '5065', //This is the fieldame for marker icon
     popupFields = ['5001'], //Popup will display these fields
     tileServer = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png ',
+    tileServer2 = 'http://{s}.sm.mapstack.stamen.com/positron/{z}/{x}/{y}.png',
     tileAttribution = 'Map data: <a href="http://openstreetmap.org">OSM</a>, Inspiration: <a href="http://bl.ocks.org/gisminister/10001728">Bård Romstad</a>',
     rmax = 30, //Maximum radius for cluster pies
     markerclusters = L.markerClusterGroup({
       maxClusterRadius: 2*rmax,
       iconCreateFunction: defineClusterIcon //this is where the magic happens
     }),
-    map = L.map('map').setView([0, 0], 0);
+    // map = L.map('map').setView([0, 0], 0);
+    map = L.map('map', {
+  center: [39.73, -104.99],
+  zoom: 10,
+  //layers not working for me
+  
+  // layers: [grayscale]
+
+});
+
   //Add basemap
   L.tileLayer(tileServer, {attribution: tileAttribution,  maxZoom: 10}).addTo(map);
+  // works
+  L.control.scale().addTo(map);
+  //works
+  var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
+    imageBounds = [[40.712216, -74.22655], [40.773941, -74.12544]];
+L.imageOverlay(imageUrl, imageBounds).addTo(map);
+//
+
   //and the empty markercluster layer
   map.addLayer(markerclusters);
   //Ready to go, load the geojson
@@ -60,6 +84,7 @@
       } else {
 	  console.log('Could not load data...');
       }
+
   });
 function defineFeature(feature, latlng) {
   var categoryVal = feature.properties[categoryField],
