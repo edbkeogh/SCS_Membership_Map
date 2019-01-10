@@ -22,15 +22,34 @@
 
 <div id="container">
   <div id="map" />
+
 </div>
+<!--  this works though-->
+<button onclick="ChangeBaseMap()">Change Base Map to Gray</button>
+<button onclick="ChangeBaseMap2()">Change Base Map to broken</button>
+<button onclick="ChangeBaseMap3()">Change Base Map to default</button>
 <script>
   "use strict"
-  var grayscale   = L.tileLayer(tileServer, {attribution: tileAttribution}),
-      		streets  = L.tileLayer(tileServer, {attribution: tileAttribution});
+  var grayscale   = L.tileLayer(tileServer),
+      		streets  = L.tileLayer(tileServer2);
           var baseLayers = {
 		"Grayscale": grayscale,
 		"Streets": streets
 	};
+
+  var overlayMaps = {
+    "Cities": cities
+};
+  var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
+    denver    = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
+    aurora    = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
+    golden    = L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.');
+
+    var cities = L.layerGroup([littleton, denver, aurora, golden]);
+    var baseMaps = {
+        "<span style='color: gray'>Grayscale</span>": grayscale,
+        "Streets": streets
+    };
   var geojson,
     metadata,
     geojsonPath = 'scs13.geojson',
@@ -50,13 +69,13 @@
   center: [39.73, -104.99],
   zoom: 10,
   //layers not working for me
-  
-  // layers: [grayscale]
+//this version of layers loads both but is annoying
+  // layers: [L.tileLayer(tileServer), L.tileLayer(tileServer2)]
 
 });
 
   //Add basemap
-  L.tileLayer(tileServer, {attribution: tileAttribution,  maxZoom: 10}).addTo(map);
+  L.tileLayer(tileServer, {attribution: tileAttribution,  maxZoom: 5}).addTo(map);
   // works
   L.control.scale().addTo(map);
   //works
@@ -64,7 +83,7 @@
     imageBounds = [[40.712216, -74.22655], [40.773941, -74.12544]];
 L.imageOverlay(imageUrl, imageBounds).addTo(map);
 //
-
+// L.control.layers(L.tileLayer(tileServer), L.tileLayer(tileServer2)).addTo(map);
   //and the empty markercluster layer
   map.addLayer(markerclusters);
   //Ready to go, load the geojson
@@ -86,6 +105,21 @@ L.imageOverlay(imageUrl, imageBounds).addTo(map);
       }
 
   });
+
+  function ChangeBaseMap() {
+
+ L.tileLayer(tileServer2, {attribution: tileAttribution,  maxZoom: 20}).addTo(map);
+  }
+  function ChangeBaseMap2() {
+
+    L.tileLayer('https://maps.wikimedia.org/osm-intl/${z}/${x}/${y}.png', {attribution: tileAttribution,  maxZoom: 10}).addTo(map);
+  }
+  function ChangeBaseMap3() {
+
+    // map.removeLayers();
+    L.tileLayer(tileServer, {attribution: tileAttribution,  maxZoom: 20}).remove(map);
+  }
+
 function defineFeature(feature, latlng) {
   var categoryVal = feature.properties[categoryField],
     iconVal = feature.properties[iconField];
